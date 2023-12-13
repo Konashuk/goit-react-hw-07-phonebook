@@ -1,44 +1,38 @@
-import { nanoid } from 'nanoid';
-import storage from 'redux-persist/lib/storage';
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
+import { fetchContacts } from './operation';
 
 export const contactsSlice = createSlice({
-  name: 'phonebook',
+  name: 'contacts',
   initialState: {
-    contacts: [],
+    contacts: {
+      items: [],
+      isLoading: false,
+      error: null,
+    },
     filters: '',
   },
-  reducers: {
-    addContacts: {
-      prepare(data) {
-        return {
-          payload: {
-            value: data,
-            id: nanoid(),
-          },
-        };
-      },
-      reducer(state, action) {
-        state.contacts = [...state.contacts, action.payload];
-      },
-    },
-    filters(state, action) {
-      state.filters = action.payload;
-    },
-    deleteCont(state, action) {
-      state.contacts = state.contacts.filter(
-        item => item.id !== action.payload
-      );
-    },
+  extraReducers: builder => {
+    builder
+      .addCase(fetchContacts.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.contacts.items = action.payload;
+      })
+      .addCase(fetchContacts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
-const persistConfig = {
-  key: 'contacts',
-  storage,
-  whitelist: ['contacts'],
-};
+// const persistConfig = {
+//   key: 'contacts',
+//   storage,
+//   whitelist: ['contacts'],
+// };
 
 export const phonebookReduser = contactsSlice.reducer;
-export const { addContacts, filters, deleteCont } = contactsSlice.actions;
-export const persistedReducer = persistReducer(persistConfig, phonebookReduser);
+// export const { addContacts, filters, deleteCont } = contactsSlice.actions;
+// export const persistedReducer = persistReducer(persistConfig, phonebookReduser);
