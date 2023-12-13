@@ -1,9 +1,9 @@
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { LabelFilter, InputFilter } from './filter.styled';
-import { filters } from 'redux/contactsSlise';
+// import { filters } from 'redux/contactsSlise';
 
 export const Filter = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // const updateFilter = value => {
   //   dispatch(filters(value));
