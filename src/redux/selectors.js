@@ -1,5 +1,4 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { filters } from './contactsSlise';
 
 export const selectContacts = state => state.contacts.items;
 
